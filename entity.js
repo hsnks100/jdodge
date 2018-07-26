@@ -59,6 +59,7 @@ ECS.Components.Health = function ComponentHealth ( value ){
 };
 ECS.Components.Health.prototype.name = 'health';
 
+ECS.systems = {};
 ECS.systems.render = function systemRender ( entities ) {
     // Here, we've implemented systems as functions which take in an array of
     // entities. An optimization would be to have some layer which only 
