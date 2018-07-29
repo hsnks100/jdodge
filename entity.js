@@ -1,137 +1,113 @@
-/* =========================================================================
- *
- * Entity.js
- *  Definition of our "Entity". Abstractly, an entity is basically an ID. 
- *  Here we implement an entity as a container of data (container of components)
- *
- * ========================================================================= */
+var game = new Phaser.Game(32*10, 32 * 20, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update }); 
 
-ECS = {};
-ECS.Components = {};
-ECS.Entity = function Entity(){
-    // Generate a pseudo random ID
-    this.id = (+new Date()).toString(16) + 
-        (Math.random() * 100000000 | 0).toString(16) +
-        ECS.Entity.prototype._count;
+var centerY = 32 * 20 / 2.0;
+var centerX = 32 * 10 / 2.0;
 
-    // increment counter
-    ECS.Entity.prototype._count++;
+var bulletSprites = [];
+var playerSprite = null;
 
-    // The component data will live in this object
-    this.components = {};
+var upKey = null;
+var downKey = null;
+var leftKey = null;
+var rightKey = null;
+var playerSpeed = 3; 
+var frameNumber = 0;
+var bulletGenInterval = 15;
 
-    return this;
-};
-// keep track of entities created
-ECS.Entity.prototype._count = 0;
+function preload() { 
+    game.load.image('wall', 'wall.png'); 
+}
 
-ECS.Entity.prototype.addComponent = function addComponent ( component ){
-    // Add component data to the entity
-    this.components[component.name] = component;
-    return this;
-};
-ECS.Entity.prototype.removeComponent = function removeComponent ( componentName ){
-    // Remove component data by removing the reference to it.
-    // Allows either a component function or a string of a component name to be
-    // passed in
-    var name = componentName; // assume a string was passed in
+function createBullet() { 
+    var s = game.add.sprite(0, 0, 'wall'); 
+    s.anchor.x = 0.5;
+    s.anchor.y = 0.5;
+    s.custom = {};
+    s.custom.radius = 10;
+    var sign1 = Math.random() > 0.5 ? 1 : -1;
+    var sign2 = Math.random() > 0.5 ? 1 : -1;
 
-    if(typeof componentName === 'function'){ 
-        // get the name from the prototype of the passed component function
-        name = componentName.prototype.name;
-    }
+    var randomAngle = Math.random() * Math.PI * 2;
+    var randomY = Math.cos(randomAngle) * centerY;
+    var randomX = Math.sin(randomAngle) * centerX;
+    s.position.y = centerY + randomY;
+    s.position.x = centerX + randomX;
+    var dx = playerSprite.position.x - s.position.x;
+    var dy = playerSprite.position.y - s.position.y; 
+    s.custom.angle = Math.atan2(dy, dx); 
+    s.custom.speed = 1 + Math.random() * 2;
+    bulletSprites.push(s); 
+}
 
-    delete this.components[name];
-    return this;
-};
+function collisionDetect() {
+    for(var bi in bulletSprites) {
+        var b = bulletSprites[bi]; 
+        var yDiff = (b.position.y - playerSprite.position.y);
+        yDiff *= yDiff;
 
-ECS.Entity.prototype.print = function print () {
-    // Function to print / log information about the entity
-    console.log(JSON.stringify(this, null, 4));
-    return this;
-};
-
-ECS.Components.Health = function ComponentHealth ( value ){
-    value = value || 20;
-    this.value = value;
-
-    return this;
-};
-ECS.Components.Health.prototype.name = 'health';
-
-ECS.systems = {};
-ECS.systems.render = function systemRender ( entities ) {
-    // Here, we've implemented systems as functions which take in an array of
-    // entities. An optimization would be to have some layer which only 
-    // feeds in relevant entities to the system, but for demo purposes we'll
-    // assume all entities are passed in and iterate over them.
-
-    // This happens each tick, so we need to clear out the previous rendered
-    // state
-    clearCanvas();
-
-    var curEntity, fillStyle; 
-
-    // iterate over all entities
-    for( var entityId in entities ){
-        curEntity = entities[entityId];
-
-        // Only run logic if entity has relevant components
-        //
-        // For rendering, we need appearance and position. Your own render 
-        // system would use whatever other components specific for your game
-        if( curEntity.components.appearance && curEntity.components.position ){
-
-            // Build up the fill style based on the entity's color data
-            fillStyle = 'rgba(' + [
-                curEntity.components.appearance.colors.r,
-                curEntity.components.appearance.colors.g,
-                curEntity.components.appearance.colors.b
-            ];
-
-            if(!curEntity.components.collision){
-                // If the entity does not have a collision component, give it 
-                // some transparency
-                fillStyle += ',0.1)';
-            } else {
-                // Has a collision component
-                fillStyle += ',1)';
-            }
-
-            ECS.context.fillStyle = fillStyle;
-
-            // Color big squares differently
-            if(!curEntity.components.playerControlled &&
-            curEntity.components.appearance.size > 12){
-                ECS.context.fillStyle = 'rgba(0,0,0,0.8)';
-            }
-
-            // draw a little black line around every rect
-            ECS.context.strokeStyle = 'rgba(0,0,0,1)';
-
-            // draw the rect
-            ECS.context.fillRect( 
-                curEntity.components.position.x - curEntity.components.appearance.size,
-                curEntity.components.position.y - curEntity.components.appearance.size,
-                curEntity.components.appearance.size * 2,
-                curEntity.components.appearance.size * 2
-            );
-            // stroke it
-            ECS.context.strokeRect(
-                curEntity.components.position.x - curEntity.components.appearance.size,
-                curEntity.components.position.y - curEntity.components.appearance.size,
-                curEntity.components.appearance.size * 2,
-                curEntity.components.appearance.size * 2
-            );
+        var xDiff = (b.position.x - playerSprite.position.x);
+        xDiff *= xDiff; 
+        var distance = yDiff + xDiff; 
+        if(distance <= 15) {
+            window.alert("puuuuung");
         }
     }
-};
+}
 
-var e = new ECS.Entity();
+function moveBullets() {
+    for(var bi in bulletSprites) {
+        var b = bulletSprites[bi];
+        b.position.x += b.custom.speed * Math.cos(b.custom.angle);
+        b.position.y += b.custom.speed * Math.sin(b.custom.angle);
+    }
+} 
 
-e.print();
-e.addComponent(new ECS.Components.Health() );
+function inputProcess() {
+    if(upKey.isDown) {
+        playerSprite.position.y -= playerSpeed;
+    }
+    if(downKey.isDown) {
+        playerSprite.position.y += playerSpeed;
+    }
+    if(leftKey.isDown) {
+        playerSprite.position.x -= playerSpeed;
+    }
+    if(rightKey.isDown) {
+        playerSprite.position.x += playerSpeed;
+    } 
+}
 
+function generator() {
+    frameNumber++;
+    if(frameNumber % bulletGenInterval == 5) {
+        createBullet();
+    }
+}
 
-e.print();
+function update() {
+    inputProcess(); 
+    moveBullets(); 
+    collisionDetect(); 
+    generator(); 
+    console.log(frameNumber); 
+
+}
+
+function create() { 
+    playerSprite = game.add.sprite(0, 0, 'wall'); 
+    playerSprite.scale.x = 0.5; 
+    playerSprite.scale.y = 0.5; 
+    playerSprite.position.y = 32 * 19; 
+    playerSprite.position.x = 32; 
+    playerSprite.anchor.x = 0.5; 
+    playerSprite.anchor.y = 0.5; 
+    upKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
+    downKey = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+    leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+    rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+    
+    for(var i=0; i<10; i++) {
+        createBullet();
+    }
+} 
 
