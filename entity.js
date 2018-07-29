@@ -49,7 +49,7 @@ function collisionDetect() {
         xDiff *= xDiff; 
         var distance = yDiff + xDiff; 
         if(distance <= 15) {
-            window.alert("puuuuung");
+            //window.alert("puuuuung");
         }
     }
 }
