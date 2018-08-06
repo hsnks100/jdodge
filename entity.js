@@ -1,5 +1,6 @@
 var game = new Phaser.Game(32*10, 32 * 20, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update }); 
 
+
 var centerY = 32 * 20 / 2.0;
 var centerX = 32 * 10 / 2.0;
 
