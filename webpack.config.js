@@ -6,7 +6,7 @@ module.exports = {
     entry: "./src/test.ts",
     output: {
         // filename: "bundle.js",
-        path: '/mnt/c/Users/hsnks/Downloads/'
+        // path: '/mnt/c/Users/hsnks/Downloads/'
     },
     mode: "none",
     module: {
