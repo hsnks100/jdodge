@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true
+    },
+    "include":[
+        "src/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ],
+    "files": [
+        "src/test.ts"
+    ],
+    "typeRoots": [
+        "./node_modules/@types",
+        "./node_modules/phaser/types"
+    ],
+    "types": [
+        "Phaser"
+    ]
+}

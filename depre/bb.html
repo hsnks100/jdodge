@@ -1,0 +1,20 @@
+<button onclick = "image1()">  
+    click here  
+</button>  
+<button onclick = "image2()">  
+    click here  
+</button>  
+<body id="body">
+</body>
+<script>
+    function image1() { 
+        var img = document.createElement('img'); 
+        img.src = 'power.png';
+        document.getElementById('body').appendChild(img); 
+    }  
+    function image2() { 
+        var img = document.createElement('img'); 
+        img.src = 'playerLeft.png';
+        document.getElementById('body').appendChild(img); 
+    }  
+</script>
