@@ -1,10 +1,11 @@
 <template>
   <div id="app">
+      <div id="phaser-example">
+      </div>
   <span v-bind:title="message">
   내 위에 잠시 마우스를 올리면 동적으로 바인딩 된 title을 볼 수 있습니다!
   </span>
     <img src="./assets/logo.png" />
-    <img src="./assets/rain.png" />
     <img src="./assets/rain.png" />
     <p> {{ message }} </p>
     <p v-if="seen">이제 나를 볼 수 있어요</p>
@@ -24,21 +25,21 @@
 
 <script>
 export default {
-  name: 'app',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App',
-      message: '이 페이지는 ' + new Date() + ' 에 로드 되었습니다' ,
-      seen: true,
-      todos: [
-        {some: "abc"},
-        {some: "abc1"},
-        {some: "abc2"},
-        {some: "abcs3"},
-      ]
-    }
-  },
-methods:
+    name: 'app',
+    data () {
+        return {
+            msg: 'Welcome to Your Vue.js App',
+            message: '이 페이지는 ' + new Date() + ' 에 로드 되었습니다' ,
+            seen: true,
+            todos: [
+                {some: "abc"},
+                {some: "abc1"},
+                {some: "abc2"},
+                {some: "abcs3"},
+            ]
+        }
+    },
+    methods:
     {
         reverseMessage: function() {
             this.message = this.message.split('').reverse().join('');

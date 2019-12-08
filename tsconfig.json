@@ -1,10 +1,15 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "module": "commonjs",
+        "strict": true,
         "sourceMap": true,
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true
+        "module": "es2015",
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "allowJs": false, 
+        "noImplicitAny": false
+
     },
     "include":[
         "src/*"
@@ -12,12 +17,10 @@
     "exclude": [
         "node_modules"
     ],
-    "files": [
-        "src/test.ts"
-    ],
+    
     "typeRoots": [
         "./node_modules/@types",
-        "./node_modules/phaser/types"
+        "./node_modules/phaser/typescript"
     ],
     "types": [
         "Phaser"

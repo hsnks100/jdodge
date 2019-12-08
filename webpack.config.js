@@ -3,7 +3,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const path = require('path');
 
 module.exports = {
-    entry: './src/test.js',
+    entry: './src/test.ts',
     output: {
         path: '/mnt/c/Users/hsnks/Downloads/'
     },
@@ -18,9 +18,16 @@ module.exports = {
             {
                 test: /\.(ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
                 loader: 'url-loader', options: {
-                    limit: 100000,
+                    limit: 100,
+                    name: '[name].[ext]', 
                     esModule: false
                 },
+            },
+            { test: /\.tsx?$/, loader: "ts-loader",
+
+                options: {
+                    //appendTsSuffixTo: [/\.vue$/]
+                }
             }
         ]
     },
@@ -31,7 +38,7 @@ module.exports = {
         new VueLoaderPlugin(),
     ],
     resolve: {
-        extensions: ['.js', '.vue', '.json'],
+        extensions: ['.js', '.vue', '.json', 'ts', 'tsx'],
         alias: {
             'vue$': 'vue/dist/vue.esm.js'
         }
