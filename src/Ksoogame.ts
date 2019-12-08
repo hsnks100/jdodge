@@ -1,6 +1,7 @@
 /// <reference path="../node_modules/phaser/types/phaser.d.ts"/>
 
-const Phaser = require('phaser');
+// const Phaser = require('phaser');
+import Phaser from 'phaser';
 // import Phaser from 'phaser';
 
 
@@ -22,23 +23,33 @@ const player = require('./assets/player.png');
 // import player from './assets/player.png'
 
 
+
 // export const haha:number = 3;
 
+class Bullet extends Phaser.GameObjects.Image {
+    public constructor(scene:Phaser.Scene, texture:string) {
+        super(scene, 0, 0, texture);
+        // super(scene, 0,);
+    }
+
+    public custom: any;
+}
 export  class GameScene extends Phaser.Scene {
     playerSpeed = 3; 
     
     playerSprite!: Phaser.GameObjects.Image;
-    upKey : any = null;
-    downKey : any = null;
-    leftKey : any = null;
-    rightKey : any = null;
+    upKey! : Phaser.Input.Keyboard.Key;
+    downKey! : Phaser.Input.Keyboard.Key;
+    leftKey! : Phaser.Input.Keyboard.Key;
+    rightKey! : Phaser.Input.Keyboard.Key;
     public constructor(some:string) { 
+        
         
         super(some); // game, 0, 0, arrow);
         console.log("phaser: ctr");
         // bulletSprites = Phaser.GameObjects.Image[];
     }
-    bulletSprites : any = [];
+    bulletSprites : Bullet[] = [];
     public create = ()=>{       
         console.log("phaser: create()");
         this.playerSprite = this.add.image(0, 0, 'player');
@@ -79,9 +90,10 @@ export  class GameScene extends Phaser.Scene {
         } 
     }
     public createBullet = () => {
-        var s = this.add.image(0, 0, 'tail');
-        s.anchorX = 0.5;
-        s.anchorY = 0.5;
+        // let s : Bullet = this.add.image(0, 0, 'tail');
+        let s : Bullet = new Bullet(this, 'tail'); // this.add.image(0, 0, 'tail');
+        // s.anchorX = 0.5;
+        // s.anchorY = 0.5;
         s.custom = {};
         s.custom.radius = 10;
         var sign1 = Math.random() > 0.5 ? 1 : -1;
