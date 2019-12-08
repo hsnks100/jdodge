@@ -1,44 +1,39 @@
-const path = require("path");
-const HtmlWebPackPlugin = require("html-webpack-plugin");
-const JavaScriptObfuscator = require('webpack-obfuscator');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const path = require('path');
 
 module.exports = {
-    entry: "./src/test.ts",
+    entry: './src/test.js',
     output: {
-        // filename: "bundle.js",
-        // path: '/mnt/c/Users/hsnks/Downloads/'
+        path: '/mnt/c/Users/hsnks/Downloads/'
     },
-    mode: "none",
     module: {
         rules: [
+            { test: /\.js$/, use: 'babel-loader' },
+            { test: /\.vue$/, use: 'vue-loader' },
+            { test: /\.css$/, use: ['vue-style-loader', 'css-loader']},
+            // { test: /\.(png|jpg|gif|svg)$/, loader: 'file-loader',
+            //     options: { esModule: false},
+            // },
             {
-                test: /\.html$/,
-                use: [
-                    {
-                        loader: "html-loader",
-                        options: { minimize: false }
-                    }
-                ]
-            },
-            {
-                test: /\.ts$/,
-                use: ['ts-loader']
-            },
-            {
-                test: /\.js$/,
-                include: [ path.resolve(__dirname, "justMySources") ],
-                enforce: 'post',
-                use: { loader: 'obfuscator-loader', options: {/* options here */} }
-            },
+                test: /\.(ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                loader: 'url-loader', options: {
+                    limit: 100000,
+                    esModule: false
+                },
+            }
         ]
     },
     plugins: [
-        new HtmlWebPackPlugin({
-                              template: './public/index.html', // public/index.html 파일을 읽는다.
-                              filename: 'index.html' // output으로 출력할 파일은 index.html 이다.
+        new HtmlWebpackPlugin({
+                              template: './index.html',
         }),
-        new JavaScriptObfuscator({
-                                 rotateUnicodeArray: true
-        }, [''])
-    ]
+        new VueLoaderPlugin(),
+    ],
+    resolve: {
+        extensions: ['.js', '.vue', '.json'],
+        alias: {
+            'vue$': 'vue/dist/vue.esm.js'
+        }
+    },
 };
