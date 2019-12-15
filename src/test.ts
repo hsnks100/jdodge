@@ -13,17 +13,9 @@ import { GameScene } from "./Ksoogame.ts";
 // let games:GameScene = new GameScene('asdasd');
 // GameScene
 
-let gameScene = new GameScene('Game'); 
+new GameScene('Game'); 
 
 
-var config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    scene: gameScene
-};
-
-var game = new Phaser.Game(config);
 
 
 // import HelloComponent from './Hello.vue'

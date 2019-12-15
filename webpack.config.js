@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: './src/test.ts',
@@ -36,6 +37,9 @@ module.exports = {
                               template: './index.html',
         }),
         new VueLoaderPlugin(),
+        new CopyPlugin([
+            { from: 'src/assets', to: 'assets' }
+        ]),
     ],
     resolve: {
         extensions: ['.js', '.vue', '.json', 'ts', 'tsx'],
