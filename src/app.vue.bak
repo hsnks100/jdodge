@@ -23,27 +23,25 @@
   </div>
 </template>
 
-<script>
-export default {
-    name: 'app',
-    data () {
-        return {
-            msg: 'Welcome to Your Vue.js App',
-            message: '이 페이지는 ' + new Date() + ' 에 로드 되었습니다' ,
-            seen: true,
-            todos: [
-                {some: "abc"},
-                {some: "abc1"},
-                {some: "abc2"},
-                {some: "abcs3"},
-            ]
-        }
-    },
-    methods:
-    {
-        reverseMessage: function() {
-            this.message = this.message.split('').reverse().join('');
-        }
+<script lang="ts">
+    import Vue from 'vue'
+import Component from 'vue-class-component'
+
+
+@Component({
+           props: {
+               message: String,
+               msg: String,
+           }
+})
+
+
+export default class HelloComponent extends Vue {
+    // msg: string = 'Welcome to Your Vue.js App';
+    message: string = '이 페이지는 ' + new Date() + ' 에 로드 되었습니다';
+    //
+    reverseMessage(): void {
+        this.message = this.message.split('').reverse().join('');
     }
 }
 </script>

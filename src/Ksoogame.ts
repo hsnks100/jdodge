@@ -29,16 +29,53 @@ function DIST(x:number, y:number, x2:number, y2:number): number {
     return Math.sqrt( (x2 - x) * (x2 - x) + (y2 - y) * (y2 - y) );
 }
 
+function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
 class Bullet extends Phaser.GameObjects.Image {
     target!: Player;
-    public constructor(scene:Phaser.Scene, texture:string) {
-        super(scene, 0, 0, texture);
+    dir!: Phaser.GameObjects.Image;
+    deltaAngle: number = 0.0;
+    public custom: any;
+    public constructor(scene:Phaser.Scene) {
+        super(scene, 0, 0, '');
+        var newSpeed = 2 + Math.random() * 4;
+        if(Math.random() >= 0.9) {
+            newSpeed = 4 + Math.random() * 2;
+            this.setTexture('bullet_red');
+            // super(scene, 0, 0, 'bullet_red');
+        } else {
+            newSpeed = 2 + Math.random() * 1;
+            this.setTexture('wall');
+            // super(scene, 0, 0, 'wall');
+        }
+        
+
+        this.deltaAngle = getRandomArbitrary(0.01, 0.025);
+        this.custom = {};
+        this.custom.speed = newSpeed;
+
         scene.add.existing(this);
+        this.dir = scene.add.image(0, 0, 'wall');
+        this.dir.scale = 0.1;
+
+        var randomAngle = Math.random() * Math.PI * 2;
+        var centerY = global.HEIGHT / 2;
+        var centerX = global.WIDTH / 2;
+        var randomY = Math.sin(randomAngle) * global.HEIGHT / 2;
+        var randomX = Math.cos(randomAngle) * global.HEIGHT / 2;
+        this.y = centerY + randomY;
+        this.x = centerX + randomX;
+        this.custom.aim = true;
         // super(scene, 0,);
         console.log(3);
     }
     public setTarget(player: Player) {
         this.target = player;
+        var dx = this.target.x - this.x;
+        var dy = this.target.y - this.y;
+        this.custom.angle = Math.atan2(dy, dx);
     }
     public update() {
         var b = this;
@@ -60,31 +97,40 @@ class Bullet extends Phaser.GameObjects.Image {
         // console.log(b.custom.angle, " -> ", (b.custom.angle + Math.atan2(dy, dx)) / 5.0);
         // b.custom.angle = (b.custom.angle + Math.atan2(dy, dx)) / 5.0; // (b.custom.angle) * 180 / Math.PI + 90;
         // console.log(b.custom.angle, " -> ", Math.atan2(dy, dx));
-        var deltaAngle = 0.08;
-        var dstAngle = Math.atan2(dy, dx);
-
+        var dstAngle = Math.atan2(dy, dx); 
         var diff = Math.atan2(Math.sin(dstAngle - b.custom.angle), Math.cos(dstAngle - b.custom.angle));
-        console.log("diff: ", diff);
-        if(diff < deltaAngle) {
+        // console.log("diff: ", diff * 180 / Math.PI);
+        var deltaAngle = this.deltaAngle;
+        if(Math.abs(diff) > Math.PI / 2) {
         } else {
+            if(diff >= 0) {
+                b.custom.angle += deltaAngle;
+            } else {
+                b.custom.angle -= deltaAngle;
+            }
         }
-        if(Math.atan2(dy, dx) < b.custom.angle) {
-            b.custom.angle -= deltaAngle;
-        } else {
-            b.custom.angle += deltaAngle;
-        } 
+        // if(Math.atan2(dy, dx) < b.custom.angle) {
+        //     b.custom.angle -= deltaAngle;
+        // } else {
+        //     b.custom.angle += deltaAngle;
+        // } 
         // b.custom.angle = Math.atan2(dy, dx);
         // console.log(b.custom.angle);
         // if(DIST(b.x, b.y, global.WIDTH / 2, global.HEIGHT / 2) > 500) {
         if(DIST(b.x, b.y, global.WIDTH / 2, global.HEIGHT / 2) > global.WIDTH / 2 + 100) {
             this.destroy(); 
+            this.dir.destroy();
         } else {
+            // b.custom.angle = 90 * Math.PI / 180.0;
+            b.setRotation(b.custom.angle);
             b.x += b.custom.speed * Math.cos(b.custom.angle);
             b.y += b.custom.speed * Math.sin(b.custom.angle);
         }
+        this.dir.setRotation(dstAngle);
+        this.dir.x = b.x;
+        this.dir.y = b.y; 
     }
 
-    public custom: any;
 }
 
 export  class GameScene extends Phaser.Scene {
@@ -98,8 +144,8 @@ export  class GameScene extends Phaser.Scene {
         console.log("phaser: ctr2");
         var config = {
             type: Phaser.AUTO,
-            width: global.WIDTH *2,
-            height: global.HEIGHT *2,
+            width: global.WIDTH,
+            height: global.HEIGHT,
             scene: this
         };
 
@@ -110,10 +156,15 @@ export  class GameScene extends Phaser.Scene {
         this.load.image('tail', 'assets/tail_bullet.png');
         this.load.image('player', 'assets/player.png');
         this.load.image('wall', 'assets/wall.png');
+        this.load.image('bullet_red', 'assets/bullet_red.png');
+        this.load.image('circle', 'assets/circle.png');
         
     }
     public create = ()=>{       
         console.log("phaser: create()");
+        var back = this.add.image(0, 0, 'circle');
+        back.x = global.WIDTH / 2;
+        back.y = global.HEIGHT / 2;
         let s : Player = new Player(this, 'player'); // this.add.image(0, 0, 'tail');
         s.scaleX = 0.2;
         s.scaleY = 0.2;
@@ -137,27 +188,13 @@ export  class GameScene extends Phaser.Scene {
             } 
         }
         // collisionDetect(); 
-        // this.generator();
+        this.generator();
     }
     public createBullet = () => {
         // let s : Bullet = this.add.image(0, 0, 'tail');
-        let s : Bullet = new Bullet(this, 'wall'); // this.add.image(0, 0, 'tail');
+        let s : Bullet = new Bullet(this);
         // s.anchorX = 0.5;
         // s.anchorY = 0.5;
-        s.custom = {};
-
-        var randomAngle = Math.random() * Math.PI * 2;
-        var centerY = global.HEIGHT / 2;
-        var centerX = global.WIDTH / 2;
-        var randomY = Math.sin(randomAngle) * global.WIDTH / 2;
-        var randomX = Math.cos(randomAngle) * global.WIDTH / 2;
-        s.y = centerY + randomY;
-        s.x = centerX + randomX;
-        var dx = this.playerSprite.x - s.x;
-        var dy = this.playerSprite.y - s.y;
-        s.custom.angle = Math.atan2(dy, dx);
-        s.custom.speed = 1 + Math.random() * 2;
-        s.custom.aim = true;
         s.setTarget(this.playerSprite);
         this.bulletSprites.push(s);
 
