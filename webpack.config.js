@@ -6,7 +6,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 module.exports = {
     entry: './src/test.ts',
     output: {
-        path: '/mnt/c/Users/hsnks/Downloads/'
+        // path: '/mnt/c/Users/hsnks/Downloads/'
     },
     module: {
         rules: [
