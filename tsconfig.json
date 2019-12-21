@@ -23,6 +23,7 @@
         "./node_modules/phaser/types"
     ],
     "types": [
-        "Phaser"
+        "Phaser",
+        "vuetify"
     ]
 }
