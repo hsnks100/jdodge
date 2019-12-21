@@ -1,0 +1,73 @@
+<template>
+    <div id="app">
+        <header> 
+
+
+            <h1>DODGE</h1> 
+        </header> 
+
+        <nav> 
+            <ul> 
+                <li><a href="#">Menu -1 </a></li> 
+                <li><a href="#">Menu -2 </a></li> 
+                <li><a href="#">Menu -3 </a></li> 
+            </ul> 
+        </nav> 
+        <section> 
+            <article> 
+                <h1>Lorem ipsum dolor sit amet</h1> 
+                <p>Lorem ipsum dolor sit amet</p> 
+            </article> 
+            <article> 
+                <h1>Lorem ipsum dolor sit amet</h1> 
+                <p>Lorem ipsum dolor sit amet</p> 
+            </article> 
+        </section> 
+        <div id="phaser-example">
+        </div>
+        <div id="Game"></div>
+        <img src="./assets/logo.png" />
+        <img src="./assets/rain.png" />
+        <p> {{ message }} </p>
+        <p v-if="seen">이제 나를 볼 수 있어요</p>
+        <button v-on:click="reverseMessage">메시지 뒤집기</button>
+        <input v-model="message"> 
+        <ol>
+            <li v-for="todo in todos">
+                {{ todo.some }}
+            </li>
+        </ol>
+        <h1>{{ msg }}</h1>
+
+        <footer><address>서울특별시 강서구 내발산동</address></footer> 
+    </div>
+
+</template>
+
+<script>
+export default {
+    name: 'app',
+    data () {
+        return {
+            msg: 'Welcome to Your Vue.js App',
+            message: '이 페이지는 ' + new Date() + ' 에 로드 되었습니다' ,
+            seen: true,
+            todos: [
+                {some: "abc"},
+                {some: "abc1"},
+                {some: "abc2"},
+                {some: "abcs3"},
+            ]
+        }
+    },
+    methods:
+    {
+        reverseMessage: function() {
+            this.message = this.message.split('').reverse().join('');
+        }
+    }
+}
+</script>
+
+<style>
+</style>

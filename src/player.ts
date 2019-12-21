@@ -6,6 +6,7 @@ export class Player extends Phaser.GameObjects.Image {
     leftKey! : Phaser.Input.Keyboard.Key;
     rightKey! : Phaser.Input.Keyboard.Key;
     playerSpeed : number = 3; 
+    live : boolean = true;
     public constructor(scene:Phaser.Scene, texture:string) {
         super(scene, 0, 0, texture);
         scene.add.existing(this);
@@ -28,6 +29,9 @@ export class Player extends Phaser.GameObjects.Image {
         if(this.rightKey.isDown) {
             this.x += this.playerSpeed;
         } 
+
+        if(this.live == false) {
+        }
     }
 
     public custom: any;

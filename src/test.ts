@@ -1,20 +1,60 @@
 // import Phaser from 'phaser';
 import Vue from 'vue'
-import HelloComponent from './App.vue'
+import { GameScene, EmptyScene } from "./Ksoogame.ts";
 
+import App from './App.vue'
+import Vuetify from "vuetify"; 
+import $ from 'jquery';
+
+import "bootstrap/dist/css/bootstrap.min.css"; 
+import "bootstrap/dist/js/bootstrap.js";
+Vue.use(Vuetify);
+
+Vue.config.productionTip = false;
+
+/* eslint-disable no-new */
+// new Vue({
+//       el: "#app",
+//       components: { App },
+//       template: "<App/>"
+// }); 
+// new EmptyScene('Game'); 
 new Vue({
-  el: '#app',
-  render: h => h(HelloComponent)
+    el: '#app',
+    render: function (createElement) {
+        var t = createElement(App);
+        // var t = createElement(Demo);
+        new EmptyScene('Game'); 
+        return t;
+    }
 })
 
-import { GameScene } from "./Ksoogame.ts";
-// import * as GameScene from './Ksoogame';
-// import * as Factory from 'factory.ts';
-// let games:GameScene = new GameScene('asdasd');
-// GameScene
 
-new GameScene('Game'); 
+// new Vue({
+//   el: '#app',
+//     render: function (createElement) {
+//         var t = createElement(HelloComponent);
+//         new EmptyScene('Game'); 
+//         return t;
+//     }
+// })
+// new Vue({
+//     vuetify,
+//     el: '#app',
+//     data: () => ({
+//         drawer: null
+//     }),
+//     // render: h => h(HelloComponent)
+//     // render: function (createElement) {
+//     //     var t = createElement(HelloComponent);
+//     //     new EmptyScene('Game'); 
+//     //     return t;
+//     // }
+// })
 
+
+//
+//
 
 
 
