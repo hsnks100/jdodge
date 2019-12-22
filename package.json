@@ -42,9 +42,11 @@
   },
   "dependencies": {
     "bootstrap": "^4.4.1",
+    "bootstrap-vue": "^2.1.0",
     "jquery": "^3.4.1",
     "phaser": "^3.21.0",
     "vue": "^2.6.10",
+    "vue-draggable": "^2.0.5",
     "vuedraggable": "^2.23.2",
     "vuetify": "1.1.9"
   }

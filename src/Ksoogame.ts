@@ -147,10 +147,15 @@ export class EmptyScene extends Phaser.Scene {
             fps: {
                 target: 60
             },
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH
+            },
             parent: 'phaser-example',
             scene: this
         };
         var game = new Phaser.Game(config);
+
     }
     public create() {
         console.log("phaser: create()");
@@ -210,7 +215,7 @@ export  class GameScene extends Phaser.Scene {
         
     }
     public initGame() {
-        this.scale.setZoom(0.8); // (0.8);
+        // this.scale.setZoom(0.8); // (0.8);
         this.boundary = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 }, fillStyle: { color: 0xff0000 }});
         this.timeDisplay = this.add.bitmapText(global.WIDTH/2, 30, 'carrier_command', '00:00');
         this.timeDisplay.setCenterAlign();

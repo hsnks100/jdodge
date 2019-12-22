@@ -1,130 +1,33 @@
 <template>
     <div id="app"> 
-        <div>
-            <b-navbar toggleable="lg" type="dark" variant="info">
-                <b-navbar-brand href="#">NavBar</b-navbar-brand>
+        <VueMenu />
 
-                <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
-                <b-collapse id="nav-collapse" is-nav>
-                    <b-navbar-nav>
-                        <b-nav-item href="#">Link</b-nav-item>
-                        <b-nav-item href="#" disabled>Disabled</b-nav-item>
-                    </b-navbar-nav>
-
-                    <!-- Right aligned nav items -->
-                    <b-navbar-nav class="ml-auto">
-                        <b-nav-form>
-                            <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
-                            <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
-                        </b-nav-form>
-
-                        <b-nav-item-dropdown text="Lang" right>
-                            <b-dropdown-item href="#">EN</b-dropdown-item>
-                            <b-dropdown-item href="#">ES</b-dropdown-item>
-                            <b-dropdown-item href="#">RU</b-dropdown-item>
-                            <b-dropdown-item href="#">FA</b-dropdown-item>
-                        </b-nav-item-dropdown>
-
-                        <b-nav-item-dropdown right>
-                            <!-- Using 'button-content' slot -->
-                            <template v-slot:button-content>
-                                <em>User</em>
-                            </template>
-                            <b-dropdown-item href="#">Profile</b-dropdown-item>
-                            <b-dropdown-item href="#">Sign Out</b-dropdown-item>
-                        </b-nav-item-dropdown>
-                    </b-navbar-nav>
-                </b-collapse>
-            </b-navbar>
-        </div>
-
-        <b-card
-                                             title="Card Title"
-                                             img-src="https://picsum.photos/600/300/?image=25"
-                                             img-alt="Image"
-                                             img-top
-                                             tag="article"
-                                             style="max-width: 20rem;"
-                                             class="mb-2"
-                                             >
-                                             <b-card-text>
-                                                 Some quick example text to build on the card title and make up the bulk of the card's content.
-                                             </b-card-text>
-
-            <b-button href="#" variant="primary">Go somewhere</b-button>
-        </b-card>
+        <b-container class="bv-example-row" fluid> 
+            <b-row>
+                <b-col cols="8">
+                    <div id="phaser-example"></div>
+                </b-col>
+                <b-col cols="4"> 
+                    <b-table striped hover
+                        id="my-table"
+                        :items="records"
+                        :per-page="perPage"
+                        :current-page="currentPage"
+                        small
+                        ></b-table>
+                    <b-pagination
+                        v-model="currentPage"
+                        :total-rows="rows"
+                        :per-page="perPage"
+                        aria-controls="my-table"
+                        ></b-pagination>
+                    <p class="mt-3">Current Page: {{ currentPage }}</p>
+                </b-col>
+            </b-row>
+        </b-container>
 
 
-
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">JDODGE {{ ksoo }}</a>
-                </div>
-
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-                        <li><a href="#">Link</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">리더보드 <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#">One more separated link</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <form class="navbar-form navbar-left">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Search">
-                        </div>
-                        <button type="submit" class="btn btn-default">Submit</button>
-                    </form>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#">Link</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div><!-- /.navbar-collapse -->
-            </div><!-- /.container-fluid -->
-        </nav>
-        <div id="phaser-example">
-        </div> 
         <div id="Game"></div>
-        <h1>
-        <table style="border: 2px solid #ff0000">
-            <tr v-for="item in records">
-                <td style="border: 2px solid #ff0000">
-                    {{ item.name }} 
-                </td>
-                <td style="border: 2px solid #ff0000">
-                    {{ item.score }}
-                </td>
-            </tr> 
-        </table>
-        </h1>
         <img src="./assets/logo.png" />
         <img src="./assets/rain.png" />
         <p> {{ message }} </p>
@@ -150,9 +53,13 @@
 
 import VueDraggable from "./components/VueDraggable";
 
+import VueMenu from "./components/VueMenu.vue";
+import { GameScene, EmptyScene } from "./Ksoogame.ts";
+
 export default {
     components: {
-        VueDraggable
+        VueDraggable,
+        VueMenu,
     },
     name: 'app',
     data () {
@@ -171,11 +78,24 @@ export default {
                 {some: "abcs3"},
             ],
             records: '',
-            ksoo: 'ksoo'
+            ksoo: 'ksoo',
+            perPage: 10,
+            currentPage: 1,
+        }
+    },
+    created() {
+    },
+    computed: {
+        rows() {
+            return this.records.length;
         }
     },
     mounted () {
+        new EmptyScene('Game'); 
         this.updateRecords();
+        let canvas = document.querySelector("canvas");
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";﻿
     },
     methods:
     {
@@ -213,8 +133,8 @@ export default {
         },
         reverseMessage: function() {
             this.message = this.message.split('').reverse().join('');
-
-
+            // var canvas = document.getElementById("phaser-example"); 
+            // canvas.style.width = "100%"; 
         }
     }
 }

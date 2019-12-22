@@ -31,7 +31,6 @@ new Vue({
     render: function (createElement) {
         var t = createElement(App);
         // var t = createElement(Demo);
-        new EmptyScene('Game'); 
         return t;
     }
 })
