@@ -52,8 +52,6 @@ export default {
                     items: [
                         { id: 7, name: "Item 7", groupId: 3 },
                         { id: 8, name: "Item 8", groupId: 3 },
-                        { id: 9, name: "Item 9", groupId: 3 },
-                        { id: 10, name: "Item 10", groupId: 3 }
                     ]
                 }
             ],

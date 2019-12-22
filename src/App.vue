@@ -7,7 +7,7 @@
                 <b-col cols="8">
                     <div id="phaser-example"></div>
                 </b-col>
-                <b-col cols="4"> 
+                <b-col cols="2"> 
                     <b-table striped hover
                         id="my-table"
                         :items="records"
@@ -23,11 +23,13 @@
                         ></b-pagination>
                     <p class="mt-3">Current Page: {{ currentPage }}</p>
                 </b-col>
+                <b-col cols="4"> 
+                    <VueDraggable />
+                </b-col>
             </b-row>
         </b-container>
 
 
-        <div id="Game"></div>
         <img src="./assets/logo.png" />
         <img src="./assets/rain.png" />
         <p> {{ message }} </p>
@@ -42,7 +44,6 @@
         <h1>{{ msg }}</h1>
 
         <footer><address>서울특별시 강서구 내발산동</address></footer> 
-        <VueDraggable />
 
     </div>
 
