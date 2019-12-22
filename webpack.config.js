@@ -11,6 +11,9 @@ module.exports = {
     output: {
         // path: '/mnt/c/Users/hsnks/Downloads/'
     },
+    devServer: {
+        port: 9000
+    },
     module: {
         rules: [
             { test: /\.js$/, use: 'babel-loader' },
@@ -34,27 +37,19 @@ module.exports = {
                 }
             },
             {
-                test: /\.s(c|a)ss$/,
+                test: /\.scss$/,
                 use: [
                     'vue-style-loader',
                     'css-loader',
-                    {
-                        loader: 'sass-loader',
-                        // Requires sass-loader@^7.0.0
-                        options: {
-                            implementation: require('sass'),
-                            fiber: require('fibers'),
-                            indentedSyntax: true // optional
-                        },
-                        // Requires sass-loader@^8.0.0
-                        options: {
-                            implementation: require('sass'),
-                            sassOptions: {
-                                fiber: require('fibers'),
-                                indentedSyntax: true // optional
-                            },
-                        },
-                    },
+                    'sass-loader'
+                ],
+            },
+            {
+                test: /\.sass$/,
+                use: [
+                    'vue-style-loader',
+                    'css-loader',
+                    'sass-loader?indentedSyntax'
                 ],
             },
 
@@ -71,11 +66,6 @@ module.exports = {
         new JavaScriptObfuscator ({
                                   rotateUnicodeArray: true
         }, ['excluded_bundle_name.js']),
-        new webpack.ProvidePlugin({
-                                  $: 'jquery',
-                                  jQuery: 'jquery',
-                                  'window.jQuery': 'jquery'
-        })
     ],
     resolve: {
         extensions: ['.js', '.vue', '.json', 'ts', 'tsx'],

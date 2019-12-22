@@ -291,6 +291,15 @@ export  class GameScene extends Phaser.Scene {
 
                 if(this.playerSprite.live == false) {
                     this.step = GameStep.die;
+                    var thiz = this;
+                    var xhr = new XMLHttpRequest();
+                    if(!xhr) {
+                        alert("can not create XHR instance");
+                        return false;
+                    } 
+                    var base_url = "http://ec2-13-124-178-78.ap-northeast-2.compute.amazonaws.com:8080/jdodge/service?cmd=addRank&name=kso&score=" + frameNumber; 
+                    xhr.open('get', base_url);
+                    xhr.send(); 
                 }
                 // collisionDetect(); 
                 this.generator();

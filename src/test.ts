@@ -3,12 +3,19 @@ import Vue from 'vue'
 import { GameScene, EmptyScene } from "./Ksoogame.ts";
 
 import App from './App.vue'
-import Vuetify from "vuetify"; 
-import $ from 'jquery';
 
-import "bootstrap/dist/css/bootstrap.min.css"; 
-import "bootstrap/dist/js/bootstrap.js";
-Vue.use(Vuetify);
+// import "bootstrap/dist/css/bootstrap.min.css"; 
+// import "bootstrap/dist/js/bootstrap.js";
+import BootstrapVue from 'bootstrap-vue'
+
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+import VueDraggable from "vue-draggable";
+// Vue.use(Vuetify);
+
+
+Vue.use(VueDraggable)
+Vue.use(BootstrapVue)
 
 Vue.config.productionTip = false;
 
