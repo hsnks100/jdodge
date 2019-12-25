@@ -5,9 +5,22 @@
 import {Player} from './player.ts'; 
 import {ReadyGoText, ReadyState} from './readygo.ts'; 
 import * as global from './consts.ts';
+
 // import Phaser from 'phaser';
 
 
+import {XorShift32} from './XorShift32.js';
+
+
+let rng1 : XorShift32 = new XorShift32();
+rng1.seed(333); // , 2);
+//
+
+for(var i=0; i<100; i++) {
+    console.log(rng1.randint());
+}
+//
+//
 
 
 // var playerSprite = null;
@@ -45,7 +58,7 @@ class Bullet extends Phaser.GameObjects.Image {
     public custom: any;
     startAngle : number = 0.0;
 
-    public constructor(scene:GameScene, radius: number) {
+    public constructor(scene:GameScene, radius: number, randomObject : any) {
         super(scene, 0, 0, '');
         this.scene = scene;
         var newSpeed = 2 + Math.random() * 4;
@@ -178,6 +191,7 @@ enum GameStep {
     playing,
     die 
 }
+
 export  class GameScene extends Phaser.Scene {
     step: GameStep = GameStep.playing; 
     readyText!: ReadyGoText;
@@ -188,6 +202,9 @@ export  class GameScene extends Phaser.Scene {
     boundaryRadius : number = global.HEIGHT / 2 - 50;
     boundaryTween! : Phaser.Tweens.Tween;
     circleImage! : Phaser.GameObjects.Image;
+    gameRecords : any = {};
+    randomObject : any = new XorShift32();
+
 
     public constructor(some:string) { 
         
@@ -216,15 +233,17 @@ export  class GameScene extends Phaser.Scene {
     }
     public initGame() {
         // this.scale.setZoom(0.8); // (0.8);
+
+        this.randomObject.seed(Math.floor(Math.random() % 10000));
         this.boundary = this.add.graphics({ lineStyle: { width: 2, color: 0x00ff00 }, fillStyle: { color: 0xff0000 }});
-        this.timeDisplay = this.add.bitmapText(global.WIDTH/2, 30, 'carrier_command', '00:00');
-        this.timeDisplay.setCenterAlign();
-        this.timeDisplay.setOrigin(0.5);
 
 
         this.circleImage = this.add.image(0, 0, 'circle');
         this.circleImage.x = global.WIDTH / 2;
         this.circleImage.y = global.HEIGHT / 2;
+        this.timeDisplay = this.add.bitmapText(global.WIDTH/2, 30, 'carrier_command', '00:00');
+        this.timeDisplay.setCenterAlign();
+        this.timeDisplay.setOrigin(0.5);
         let s : Player = new Player(this, 'player'); // this.add.image(0, 0, 'tail');
         s.scaleX = 0.2;
         s.scaleY = 0.2;
@@ -258,6 +277,9 @@ export  class GameScene extends Phaser.Scene {
             repeat: -1
         });
         this.boundaryTween.pause();
+
+        this.gameRecords["SEED"] = 99;
+        this.gameRecords["inputs"] = [];
     }
     public create() {
         console.log("phaser: create()");
@@ -292,9 +314,13 @@ export  class GameScene extends Phaser.Scene {
                         this.bulletSprites.splice(i, 1); 
                     } 
                 }
-                this.playerSprite.update();
+                this.playerSprite.update(this.gameRecords);
+                if(DIST(this.playerSprite.x, this.playerSprite.y, circle.x, circle.y) > this.boundaryRadius) {
+                    this.playerSprite.live = false;
+                }
 
                 if(this.playerSprite.live == false) {
+                    console.log(JSON.stringify(this.gameRecords));
                     this.step = GameStep.die;
                     var thiz = this;
                     var xhr = new XMLHttpRequest();
@@ -315,7 +341,7 @@ export  class GameScene extends Phaser.Scene {
     }
     public createBullet = () => {
         // let s : Bullet = this.add.image(0, 0, 'tail');
-        let s : Bullet = new Bullet(this, this.boundaryRadius);
+        let s : Bullet = new Bullet(this, this.boundaryRadius, this.randomObject);
         // s.anchorX = 0.5;
         // s.anchorY = 0.5;
         s.setTarget(this.playerSprite);

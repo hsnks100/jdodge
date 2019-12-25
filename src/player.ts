@@ -16,19 +16,25 @@ export class Player extends Phaser.GameObjects.Image {
         this.rightKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         // super(scene, 0,);
     }
-    public update() {
+    public update(gameRecords:any) {
+        let inputObj : any = {};
         if(this.upKey.isDown) {
+            inputObj.up = 1;
             this.y -= this.playerSpeed;
         }
         if(this.downKey.isDown) {
+            inputObj.down = 1;
             this.y += this.playerSpeed;
         }
         if(this.leftKey.isDown) {
+            inputObj.left = 1;
             this.x -= this.playerSpeed;
         }
         if(this.rightKey.isDown) {
+            inputObj.right = 1;
             this.x += this.playerSpeed;
         } 
+        gameRecords["inputs"].push(inputObj);
 
         if(this.live == false) {
         }

@@ -1,4 +1,5 @@
 <template>
+
 <div>
     <b-navbar toggleable="lg" type="dark" variant="info">
         <b-navbar-brand href="#">JDODGE</b-navbar-brand>
@@ -10,7 +11,7 @@
                 <b-nav-item href="#">Link</b-nav-item>
 
                 <b-nav-item href="#" disabled>Disabled</b-nav-item>
-                <b-nav-item href="#"><button v-on:click="reverseMessage">test</button></b-nav-item>
+                <b-nav-item href="#"><button>test</button></b-nav-item>
             </b-navbar-nav>
             <b-navbar-nav class="ml-auto">
                 <b-nav-form>
@@ -27,11 +28,25 @@
 
                 <b-nav-item-dropdown right>
                     <!-- Using 'button-content' slot -->
-                    <template v-slot:button-content>
+
+                    <template v-if="username != ''" v-slot:button-content >
+                        <em>{{ username }}({{ userid }}), Hi!</em>
+                    </template>
+                    <template v-else v-slot:button-content >
                         <em>User</em>
                     </template>
-                    <b-dropdown-item href="#">Profile</b-dropdown-item>
-                    <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+                    <template v-if="username != ''">
+                        <b-dropdown-item href="#">Profile</b-dropdown-item>
+                        <b-dropdown-item href="#">
+                            <GoogleLogin :params="params" :logoutButton=true :onSuccess="onLogout" :onFailure="onLogoutFail">Logout</GoogleLogin>
+                        </b-dropdown-item>
+                    </template>
+                    <template v-else>
+                        <b-dropdown-item href="#">
+                            <GoogleLogin :params="params" :renderParams="renderParams" :onSuccess="onSuccess" :onFailure="onFailure"></GoogleLogin>
+                        </b-dropdown-item>
+                    </template>
+
                 </b-nav-item-dropdown>
             </b-navbar-nav>
         </b-collapse>
@@ -40,50 +55,67 @@
 
 </template>
 <script>
+import GoogleLogin from 'vue-google-login';
 export default {
+    components: {
+        GoogleLogin, 
+    },
     data() {
         return {
-            groups: [
-                {
-                    id: 1,
-                    name: "To Do",
-                    items: [
-                        { id: 1, name: "Item 1", groupId: 1 },
-                        { id: 2, name: "Item 2", groupId: 1 },
-                        { id: 3, name: "Item 3", groupId: 1 }
-                    ]
-                },
-                {
-                    id: 2,
-                    name: "In Progress",
-                    items: [
-                        { id: 4, name: "Item 4", groupId: 2 },
-                        { id: 5, name: "Item 5", groupId: 2 },
-                        { id: 6, name: "Item 6", groupId: 2 }
-                    ]
-                },
-                {
-                    id: 3,
-                    name: "Done",
-                    items: [
-                        { id: 7, name: "Item 7", groupId: 3 },
-                        { id: 8, name: "Item 8", groupId: 3 },
-                        { id: 9, name: "Item 9", groupId: 3 },
-                        { id: 10, name: "Item 10", groupId: 3 }
-                    ]
-                }
-            ],
-            options: {
-                dropzoneSelector: ".drag-inner-list",
-                draggableSelector: ".drag-item"
-            }
+            params: {
+                client_id: "435678538765-9dp720935bq4r4tbhsfmf9onf6l6s0ao.apps.googleusercontent.com"
+            },
+            renderParams: {
+                width: 250,
+                height: 50,
+                longtitle: true
+            },
+            username: "",
+            userid: ""
         };
     },
     methods: {
         onGroupsChange(e) {
             console.log({ e });
+        },
+        onSuccess(googleUser) {
+            // this.loggedIn = true;
+            var t = googleUser.getBasicProfile();
+            // this.username = t.getName();
+
+            var myUserEntity = {};
+            myUserEntity.Id = t.getId();
+            myUserEntity.Name = t.getName();
+            sessionStorage.setItem('jdodge_auth',JSON.stringify(myUserEntity)); 
+            this.username = t.getName();
+            this.userid = t.getId();
+
+            console.log(t.getName()); 
+            // // This only gets the user information: id, name, imageUrl and email
+            // console.log(googleUser.getBasicProfile());
+        },
+        onFailure(err) {
+            console.log("onf", err);
+        },
+        onLogout() {
+            console.log("logout: ");
+            sessionStorage.clear();
+            this.username = "";
+            this.userid = "";
+        },
+        onLogoutFail(err) {
+            console.log("onf", err);
+        },
+    },
+    mounted() {
+        if(sessionStorage.getItem('jdodge_auth') == null){
+        } else {
+            var userEntity = {};
+            userEntity = JSON.parse(sessionStorage.getItem('jdodge_auth'));
+            this.username = userEntity.Name;
+            this.userid = userEntity.Id;
         }
-    }
+    },
 };
 </script>
 
