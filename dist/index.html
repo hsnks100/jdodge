@@ -6,9 +6,6 @@
         <title>WEBPACK4-REACT</title>
     </head>
     <script src="//cdnjs.cloudflare.com/ajax/libs/phaser/3.21.0/phaser.js"></script>
-    <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="435678538765-9dp720935bq4r4tbhsfmf9onf6l6s0ao.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <body>
         <div id="app"></div> 
 
@@ -16,39 +13,6 @@
         // new Vue({ el: '#vue-app', data: function () { return { message: '안녕하세요. 뷰(Vue)입니다.' } } });
     </script>
 
-    <div>Lorem ipsum</div>
-    <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark">dfd</div>
-    <script>
-        function onSignIn(googleUser) {
-            // Useful data for your client-side scripts:
-            var profile = googleUser.getBasicProfile();
-            console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-            console.log('Full Name: ' + profile.getName());
-            console.log('Given Name: ' + profile.getGivenName());
-            console.log('Family Name: ' + profile.getFamilyName());
-            console.log("Image URL: " + profile.getImageUrl());
-            console.log("Email: " + profile.getEmail());
-
-            // The ID token you need to pass to your backend:
-            var id_token = googleUser.getAuthResponse().id_token;
-            console.log("ID Token: " + id_token);
-        };
-    </script>
-    <script>
-        function init() {
-            gapi.load('auth2', function() { 
-                var gauth = gapi.auth2.init({
-                                            client_id: '435678538765-9dp720935bq4r4tbhsfmf9onf6l6s0ao.apps.googleusercontent.com'
-                });
-
-                gauth.then(function(){
-                    console.log('init success');
-                }, function(){
-                    console.error('init fail');
-                })
-            });
-        }
-    </script>
 
     <script type="text/javascript" src="main.js"></script></body>
 </html>
