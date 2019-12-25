@@ -328,7 +328,7 @@ export  class GameScene extends Phaser.Scene {
                         alert("can not create XHR instance");
                         return false;
                     } 
-                    var base_url = "http://ec2-13-124-178-78.ap-northeast-2.compute.amazonaws.com:8080/jdodge/service?cmd=addRank&name=kso&score=" + frameNumber; 
+                    var base_url = "https://jdodge-1203598482.ap-northeast-2.elb.amazonaws.com/jdodge/service?cmd=addRank&name=kso&score=" + frameNumber; 
                     xhr.open('get', base_url);
                     xhr.send(); 
                 }

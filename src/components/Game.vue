@@ -93,7 +93,7 @@ export default {
             var thiz = this;
             thiz.records = [{"name":"han", "score":124443}];
             var updater = function() {
-                var base_url = "http://ec2-13-124-178-78.ap-northeast-2.compute.amazonaws.com:8080/jdodge/service?cmd=showAll"; 
+                var base_url = "https://jdodge-1203598482.ap-northeast-2.elb.amazonaws.com/jdodge/service?cmd=showAll";
                 // var base_url = "https://api.ipify.org?format=json";
                 axios.get(base_url)
                     .then( response => { 
